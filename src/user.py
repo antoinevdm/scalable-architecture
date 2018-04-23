@@ -18,6 +18,7 @@ class Users(Resource):
             i = i+1
         return {'Number of users': i} # Fetches first column that is Employee ID
 
+    # to test
     def post(self):
         print(request.json)
         Name = request.json['Name']
