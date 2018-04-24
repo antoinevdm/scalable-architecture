@@ -29,7 +29,10 @@ class Users(Resource):
         return {'status': 'success'}
 
 class User(Resource):
-    def get(self, name, password):
+    def post(self):
+        print(request.json)
+        name = request.json['Name']
+        password = request.json['Password']
         query = conn.execute("SELECT PASSWORD FROM USERS WHERE NAME = '"+name+"'");
         realPassword = ""
         for row in query:
@@ -37,18 +40,25 @@ class User(Resource):
             print(realPassword)
             break
         if realPassword is "":
-            return {'Error': 'User does not exist'}
+            # retrun httpcode
+            return 'user does not exist', 404
         if realPassword != password:
-            return {'Error': 'Wrong password'}
+            return 'Wrong password', 403
 
         encoded = jwt.encode({'name': ''+name+''}, 'scalable', algorithm='HS256')
         encoded = encoded.decode('UTF-8')
         return {'token': ''+encoded+''}
 
 api.add_resource(Users, '/users')
-api.add_resource(User, '/user/<name>/<password>')
-
+api.add_resource(User, '/user')
 
 if __name__ == '__main__':
     conn = sqlite3.connect('user.db')
+    # to fill the database
+    # conn.execute('''CREATE TABLE USERS
+           # (NAME TEXT PRIMARY KEY    NOT NULL,
+           # PASSWORD         TEXT     NOT NULL);''')
+    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Antoine', 'ordinateur')");
+    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Gaetano', 'ordinateur')");
+    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Sylvain', 'ordinateur')");
     app.run(port=5002)
