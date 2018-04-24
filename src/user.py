@@ -6,7 +6,6 @@ from flask_jsonpify import jsonify
 import sqlite3
 import jwt
 
-# db_connect = create_engine('sqlite:///chinook.db')
 app = Flask(__name__)
 api = Api(app)
 
@@ -40,7 +39,6 @@ class User(Resource):
             print(realPassword)
             break
         if realPassword is "":
-            # retrun httpcode
             return 'user does not exist', 403
         if realPassword != password:
             return 'Wrong password', 403
@@ -54,12 +52,4 @@ api.add_resource(User, '/user')
 
 if __name__ == '__main__':
     conn = sqlite3.connect('user.db')
-     #to fill the database
-    # conn.execute('''CREATE TABLE USERS
-    #         (NAME TEXT PRIMARY KEY    NOT NULL,
-    #         PASSWORD         TEXT     NOT NULL);''')
-    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Antoine', 'ordinateur')");
-    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Gaetano', 'ordinateur')");
-    # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Sylvain', 'ordinateur')");
-    # conn.commit()
     app.run(port=5002)
