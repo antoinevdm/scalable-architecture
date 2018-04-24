@@ -30,9 +30,8 @@ class Users(Resource):
 
 class User(Resource):
     def post(self):
-        print(request.json)
-        name = request.json['Name']
-        password = request.json['Password']
+        name = request.form['Name']
+        password = request.form['Password']
         query = conn.execute("SELECT PASSWORD FROM USERS WHERE NAME = '"+name+"'");
         realPassword = ""
         for row in query:
@@ -54,10 +53,10 @@ api.add_resource(User, '/user')
 
 if __name__ == '__main__':
     conn = sqlite3.connect('user.db')
-    # to fill the database
+     #to fill the database
     # conn.execute('''CREATE TABLE USERS
-           # (NAME TEXT PRIMARY KEY    NOT NULL,
-           # PASSWORD         TEXT     NOT NULL);''')
+    #         (NAME TEXT PRIMARY KEY    NOT NULL,
+    #         PASSWORD         TEXT     NOT NULL);''')
     # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Antoine', 'ordinateur')");
     # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Gaetano', 'ordinateur')");
     # conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('Sylvain', 'ordinateur')");
