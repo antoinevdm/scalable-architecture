@@ -1,6 +1,6 @@
 import os
 import time
-from flask import Flask, request, render_template,redirect, flash
+from flask import Flask, request, render_template,redirect, flash, url_for
 import json
 import datetime 
 from sqlalchemy import create_engine
@@ -14,18 +14,27 @@ session = Session()
 
 app = Flask(__name__)
 
-
 @app.route('/show_posts',methods=['POST','GET'])#---------------------------------------------
 def show_posts():
     posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
-    return render_template('posts.html', posts = posts)
+    return render_template('posts.html', posts = posts, token='')
+
+@app.route('/show_posts_token',methods=['POST','GET'])#---------------------------------------------
+def show_post_token():
+    token=request.args['token']
+    posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
+    return render_template('posts.html', posts = posts, token=token)
+
 
 @app.route('/api/add_post',methods=['POST','GET'])#---------------------------------------------
 def add_post():
     content = request.form['post']
+    token = request.form['jwt']
     session.add(Post(None,content, datetime.datetime.now()))
     session.commit()
-    return redirect("/show_posts")
+    print('ergehetethethe')
+    print(token)
+    return redirect(url_for('show_post_token', token=token))
 
 if __name__ == "__main__":
     app.secret_key = 'super secret key'
