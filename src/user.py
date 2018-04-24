@@ -18,12 +18,13 @@ class Users(Resource):
             i = i+1
         return {'Number of users': i} # Fetches first column that is Employee ID
 
-    # to test
+    #sql injection : { "Name": "antoine", "Password": "test+\"'); DROP TABLE USERS;"}
+    # plus change execute to execute scritpt
     def post(self):
         print(request.json)
         Name = request.json['Name']
         Password = request.json['Password']
-        query = conn.execute("INSERT INTO USERS (ID, NAME, PASSWORD) VALUES (0, "+Name+","+Password+")");
+        query = conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('"+Name+"', '"+Password+"')");
         conn.commit()
         return {'status': 'success'}
 
