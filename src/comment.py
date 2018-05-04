@@ -41,4 +41,4 @@ api.add_resource(Comment, '/comment')
 
 if __name__ == '__main__':
     conn = sqlite3.connect('comment.db')
-    app.run(port=4800)
+    app.run(port=5001)

@@ -18,7 +18,6 @@ $("#login").submit(function(event){
             console.log(jwt);
             $("#jwt").val(jwt); 
             name = parseJwt(jwt).name;
-            console.log(name);
             $("#login_button").html(name);
             $("#closepopup").trigger('click');
             $("#newpost").show()
@@ -29,18 +28,9 @@ $("#login").submit(function(event){
 
 });
 
-// $("#createpost").submit(function(event){
-//     event.preventDefault(); //prevent default action 
-//     var post_url = $(this).attr("action"); //get form action url
-//     var form_data = $(this).serialize(); //Encode form elements for submission
-
-//     $.post( post_url, form_data)
-//         .done(function(response){
-//             console.log("done");
-//     })
-//     .fail(function(response){
-//         console.log("failed toadd");
-//     });
-
-// });
-
+$( document ).ready(function() {
+    jwt= $('#my-data').data('token');
+    if(jwt){
+        $("#newpost").show()
+    }
+});
