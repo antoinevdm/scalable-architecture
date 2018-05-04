@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from posts_db import *
 import sys
+import jwt
 
 # create a Session
 Session = sessionmaker(bind=engine)
@@ -14,7 +15,7 @@ session = Session()
 
 app = Flask(__name__)
 
-@app.route('/show_posts',methods=['POST','GET'])#---------------------------------------------
+@app.route('/',methods=['POST','GET'])#---------------------------------------------
 def show_posts():
     posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
     return render_template('posts.html', posts = posts, token='')
@@ -23,17 +24,18 @@ def show_posts():
 def show_post_token():
     token=request.args['token']
     posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
-    return render_template('posts.html', posts = posts, token=token)
+    token = jwt.decode(token,'scalable')
+    name = token['name']
+    return render_template('posts.html', posts = posts, name=name)
 
 
 @app.route('/api/add_post',methods=['POST','GET'])#---------------------------------------------
 def add_post():
     content = request.form['post']
     token = request.form['jwt']
-    session.add(Post(None,content, datetime.datetime.now()))
+    name = jwt.decode(token,'scalable')['name']
+    session.add(Post(name,content, datetime.datetime.now()))
     session.commit()
-    print('ergehetethethe')
-    print(token)
     return redirect(url_for('show_post_token', token=token))
 
 if __name__ == "__main__":
