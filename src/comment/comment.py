@@ -19,8 +19,9 @@ class Comments(Resource):
         return {'Number of comment': i} # Fetches first column that is Employee ID
 
     def post(self):
-        postId = request.form["PostId"]
-        query = conn.execute("Select USER, VALUE FROM COMMENT WHERE POSTID = '"+postId+"'");
+        postId = request.json["postId"]
+        # postId = request.args.get("postId")
+        query = conn.execute("Select USER, VALUE FROM COMMENT WHERE POSTID = "+postId+"");
         result = query.fetchall()
         return result
 
