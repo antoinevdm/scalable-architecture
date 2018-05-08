@@ -19,7 +19,7 @@ token =''
 
 @app.route('/',methods=['POST','GET'])#---------------------------------------------
 def show_posts():
-    posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
+    posts= session.query(Post.post_id, Post.user_name, Post.content, Post.time).order_by(Post.post_id.desc()).all()
     return render_template('posts.html', posts = posts, token='')
 
 
@@ -30,7 +30,7 @@ def show_post_token(name):
     if(name != expected_name):
         flash("User refused","alert alert-danger")
         return redirect('/')
-    posts= session.query(Post.user_name, Post.content, Post.time).order_by(Post.id.desc()).all()
+    posts= session.query(Post.post_id,Post.user_name, Post.content, Post.time).order_by(Post.post_id.desc()).all()
     return render_template('posts.html', posts = posts, token=token, name= expected_name)
 
 
@@ -39,7 +39,6 @@ def add_post():
     global token
     content = request.form['post']
     token = request.form['jwt']
-    print(token)
     name = jwt.decode(token,'scalable')['name']
     session.add(Post(name,content, datetime.datetime.now()))
     session.commit()

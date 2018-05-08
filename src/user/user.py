@@ -20,7 +20,6 @@ class Users(Resource):
     #sql injection : { "Name": "antoine", "Password": "test+\"'); DROP TABLE USERS;"}
     # plus change execute to execute scritpt
     def post(self):
-        print(request.json)
         Name = request.json['Name']
         Password = request.json['Password']
         query = conn.execute("INSERT INTO USERS(NAME, PASSWORD) VALUES ('"+Name+"', '"+Password+"')");
@@ -29,14 +28,12 @@ class Users(Resource):
 
 class User(Resource):
     def post(self):
-        # print(request.json)
         name = request.form['Name']
         password = request.form['Password']
         query = conn.execute("SELECT PASSWORD FROM USERS WHERE NAME = '"+name+"'");
         realPassword = ""
         for row in query:
             realPassword= row[0]
-            print(realPassword)
             break
         if realPassword is "":
             return 'user does not exist', 403

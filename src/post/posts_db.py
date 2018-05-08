@@ -10,7 +10,7 @@ Base = declarative_base()
 ########################################################################
 class Post(Base):
     __tablename__ = "post"
-    id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, primary_key=True)
     user_name = Column(String(32))
     content = Column(String(64))
     time = Column(DateTime)

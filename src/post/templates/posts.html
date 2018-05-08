@@ -82,11 +82,11 @@
           <div class="panel-heading">{{post.user_name}} - {{post.time.strftime("%c")}}</div>
           <div class="panel-body">{{post.content}}</div>
           <div class="panel-footer">
-            <button  type="button" class="btn btn-link" name="show_comments" value = "{{loop.index}}">Commentaires</button>  
-            <button type="button" class="btn btn-link" name="add_comment" value="{{loop.index}}">Ajouter un commentaire</button>
-            <textarea id="comment_value_{{loop.index}}" name="comment_value"></textarea>
-            <div style="display:none;" id ="comments_{{loop.index}}"class="panel panel-default">
-              <div id ="comments_value_{{loop.index}}" class="panel-body">
+            <button  type="button" class="btn btn-link" name="show_comments" value = "{{post.post_id}}">Commentaires</button>  
+            <button type="button" class="btn btn-link" name="add_comment" value={{post.post_id}}>Ajouter un commentaire</button>
+            <textarea id="comment_value_{{post.post_id}}" name="comment_value"></textarea>
+            <div style="display:none;" id ="comments_{{post.post_id}}"class="panel panel-default">
+              <div id ="comments_value_{{post.post_id}}" class="panel-body">
                   
               </div>
             </div> 
