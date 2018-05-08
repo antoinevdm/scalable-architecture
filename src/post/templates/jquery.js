@@ -15,7 +15,6 @@ $("#login").submit(function(event){
     $.post( post_url, form_data)
         .done(function(response){
             jwt = response.token;
-            console.log(jwt);
             $("#jwt").val(jwt); 
             name = parseJwt(jwt).name;
             $("#login_button").html(name);
@@ -33,4 +32,46 @@ $( document ).ready(function() {
     if(jwt){
         $("#newpost").show()
     }
+});
+
+$('[name="show_comments"]').click(function(){
+    var id = $(this).val();
+    $.post( "http://127.0.0.1:5001/comments", {"postId": id})
+        .done(function(response){
+            if (response.length != 0){
+                $('#comments_value_'+id).empty();
+                for (var i=0; i<response.length; i++) {
+                    $('#comments_value_'+id).append("<li><b>"+response[i][0]+"</b> dit: "+ response[i][1]+"</li>");
+                }
+            }     
+        })
+        .fail(function(response){
+            console.log("failed to get comments");
+        });
+    
+    if ($('#comments_'+id).css('display') == "none"){
+        $('#comments_'+id).show();
+    }
+    else{
+        $('#comments_'+id).hide();
+    }    
+});
+
+$('[name="add_comment"]').click(function(){
+    if (jwt) {
+        var id = $(this).val();
+        var value = $('#comment_value_'+id).val();
+        console.log("adding " + value+ " to comment db");
+    
+        $.post( "http://127.0.0.1:5001/comment", {"jwt": jwt, "PostId": id, "Value": value})
+            .done(function(response){
+                console.log(value+ " added to comment db");
+            })
+            .fail(function(response){
+                console.log("failed to get comments");
+            });
+    } else {
+        alert("user not logged in");
+    }
+    
 });

@@ -14,6 +14,16 @@
   <div class='container'>
     <div class="jumbotron">
       <header>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %} 
          <!-- Log in -->
         <button type="button" id="login_button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalLong">
           {% if token !=''%}
@@ -59,7 +69,7 @@
             <form id="createpost" action="http://localhost:5000/api/add_post" method="post" >
               <div class="form-group"> <!-- Post field !-->
                 <textarea class="form-control" id="post_id" name="post" placeholder="Type your post"></textarea>
-                <input class="text" type="hidden" id='jwt' name='jwt'/>
+                <input class="text" type="hidden" id='jwt' name='jwt' value="{{token}}"/>
               </div>
               <div class="form-group"> <!-- Submit button !-->
                 <button type="submit" class="btn btn-primary" form="createpost">Submit</button>
@@ -69,11 +79,17 @@
         </div>
       {% for post in posts %}
         <div class="panel panel-default">
-          <div class="panel-heading">{{post.user_id}} - {{post.time.strftime("%c")}}</div>
+          <div class="panel-heading">{{post.user_name}} - {{post.time.strftime("%c")}}</div>
           <div class="panel-body">{{post.content}}</div>
           <div class="panel-footer">
-            <button type="button" class="btn btn-link">Commentaires</button>
-            <button type="button" class="btn btn-link">Ajouter un commentaire</button>
+            <button  type="button" class="btn btn-link" name="show_comments" value = "{{loop.index}}">Commentaires</button>  
+            <button type="button" class="btn btn-link" name="add_comment" value="{{loop.index}}">Ajouter un commentaire</button>
+            <textarea id="comment_value_{{loop.index}}" name="comment_value"></textarea>
+            <div style="display:none;" id ="comments_{{loop.index}}"class="panel panel-default">
+              <div id ="comments_value_{{loop.index}}" class="panel-body">
+                  
+              </div>
+            </div> 
           </div>
         </div> 
       {% endfor %}      
