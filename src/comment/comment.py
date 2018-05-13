@@ -11,13 +11,6 @@ app = Flask(__name__)
 api = Api(app)
 
 class Comments(Resource):
-    def get(self):
-        query = conn.execute("SELECT * FROM COMMENT") # This line performs query and returns json result
-        i=0
-        for row in query:
-            i = i+1
-        return {'Number of comment': i} # Fetches first column that is Employee ID
-
     def post(self):
         postId = request.form["postId"]
         # postId = request.args.get("postId")
